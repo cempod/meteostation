@@ -10,6 +10,12 @@ config ARCH_BOARD_METEOSTATION
     select ARCH_HAVE_BUTTONS
     select ARCH_HAVE_IRQBUTTONS
 
+config METEO_LEDS
+    bool "Enable meteo leds"
+    default y
+    ---help---
+        This enables meteo leds driver.
+
 if ARCH_BOARD_METEOSTATION
 
 endif # ARCH_BOARD_METEOSTATION

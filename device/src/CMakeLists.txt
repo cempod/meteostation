@@ -24,8 +24,6 @@ set(SRCS stm32_boot.c stm32_bringup.c)
 
 if(CONFIG_ARCH_LEDS)
   list(APPEND SRCS stm32_autoleds.c)
-else()
-  list(APPEND SRCS stm32_userleds.c)
 endif()
 
 if(CONFIG_BOARDCTL)
@@ -34,6 +32,10 @@ endif()
 
 if(CONFIG_USBDEV)
   list(APPEND SRCS stm32_usb.c)
+endif()
+
+if(CONFIG_METEO_LEDS)
+  list(APPEND SRCS meteo_leds_driver.c)
 endif()
 
 target_sources(board PRIVATE ${SRCS})
