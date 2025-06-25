@@ -32,11 +32,10 @@ if(CONFIG_BOARDCTL)
   list(APPEND SRCS stm32_appinitialize.c)
 endif()
 
+if(CONFIG_USBDEV)
+  list(APPEND SRCS stm32_usb.c)
+endif()
+
 target_sources(board PRIVATE ${SRCS})
 
-if(NOT CONFIG_BUILD_FLAT)
-  add_subdirectory(${NUTTX_BOARD_DIR}/kernel)
-  set_property(
-    GLOBAL PROPERTY LD_SCRIPT_USER ${NUTTX_BOARD_DIR}/scripts/memory.ld
-                    ${NUTTX_BOARD_DIR}/scripts/user-space.ld)
-endif()
+set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/flash.ld")
