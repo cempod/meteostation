@@ -1,0 +1,15 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config ARCH_BOARD_METEOSTATION
+    bool "meteostation board"
+    depends on ARCH_CHIP_STM32H743VI
+    select ARCH_HAVE_LEDS
+    select ARCH_HAVE_BUTTONS
+    select ARCH_HAVE_IRQBUTTONS
+
+if ARCH_BOARD_METEOSTATION
+
+endif # ARCH_BOARD_METEOSTATION
