@@ -79,6 +79,7 @@ int stm32_bringup(void)
 #endif /* CONFIG_FS_PROCFS */
 
 #ifdef CONFIG_METEO_LEDS
+  extern int init_meteo_leds(void);
   ret = init_meteo_leds();
   if (ret < 0)
     {

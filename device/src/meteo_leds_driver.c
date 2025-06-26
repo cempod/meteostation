@@ -27,45 +27,86 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sched.h>
+#include <debug.h>
 #include "stm32_gpio.h"
 #include "meteostation.h"
 #include "arch/board/board.h"
 
 #ifndef CONFIG_ARCH_LEDS
 
-typedef FAR struct file file_t;
-
-static ssize_t meteo_leds_read(file_t *filep, FAR char *buffer, size_t buflen);
-//static int meteo_leds_ioctl(FAR struct file *filep, int cmd, unsigned long arg);
 struct meteo_leds_driver_s
 {
 	uint8_t pwm_leds_mask;
 	uint8_t leds_statuses[BOARD_NLEDS];
 };
+
+enum meteo_leds {
+	MSTATUS_LED = 0,
+};
+
+typedef FAR struct file file_t;
+
+static int     meteo_leds_open(file_t *filep);
+static int     meteo_leds_close(file_t *filep);
+static ssize_t meteo_leds_read(file_t *filep, FAR char *buffer, size_t buflen);
+static int meteo_leds_ioctl(FAR struct file *filep, int cmd, unsigned long arg);
 static const struct file_operations leds_ops = {
-	NULL,		            /* open */
-	NULL,		            /* close */
+	meteo_leds_open,		/* open */
+	meteo_leds_close,		/* close */
 	meteo_leds_read,		/* read */
 	NULL,		            /* write */
 	NULL,			        /* seek */
-	NULL,		/* ioctl */
+	meteo_leds_ioctl,		/* ioctl */
 };
+
+static int meteo_leds_open(file_t *filep)
+{
+	/* Nothing to do here, maybe I should increase a counter like for Linux driver? */
+
+	return OK;
+}
+
+static int meteo_leds_close(file_t *filep)
+{
+	/* Nothing to do here, maybe I should decrease a counter like for Linux driver?*/
+
+	return OK;
+}
 
 static ssize_t meteo_leds_read(file_t *filep, FAR char *buf, size_t buflen)
 {
-	register uint8_t reg;
+	FAR struct inode *inode = filep->f_inode;
+	FAR struct meteo_leds_driver_s *priv = inode->i_private;
+	FAR struct meteo_leds_driver_s *p = (FAR struct meteo_leds_driver_s *)buf;
 
-	if(buf == NULL || buflen < 1)
-		/* Well... nothing to do */
-		return -EINVAL;
+	if (buflen < sizeof(struct meteo_leds_driver_s))
+    {
+      syslog(LOG_ERR, "Expected buffer size is %zu\n", sizeof(struct meteo_leds_driver_s));
+      return 0;
+    }
 
-	/* These LEDs are actived by low signal (common anode), then invert signal we read*/
-	reg = stm32_gpioread(GPIO_LD1);
-	reg = reg & 0x0F;
+	for (int i = 0; i<BOARD_NLEDS; i++) {
+		p->leds_statuses[i] = priv->leds_statuses[i];
+	}
+	p->pwm_leds_mask = priv->pwm_leds_mask;
+	
+	return buflen;
+}
 
-	*buf = (char) reg;
-
-	return 1;
+static int meteo_leds_ioctl(FAR struct file *filep, int cmd, unsigned long arg)
+{
+	FAR struct inode        *inode = filep->f_inode;
+	FAR struct meteo_leds_driver_s *priv  = inode->i_private;
+	int ret = OK;
+	
+	if (priv->pwm_leds_mask & (1 << cmd)) {
+		syslog(LOG_ERR, "PWM leds is not supported now");
+	} else {
+		priv->leds_statuses[cmd] = (uint8_t)arg;
+		stm32_gpiowrite(GPIO_LD1, arg > 0 ? true : false);
+	}
+	
+	return ret;
 }
 
 int init_meteo_leds(void)
@@ -81,7 +122,6 @@ int init_meteo_leds(void)
 
 	int ret = register_driver("/dev/leds", &leds_ops, 0444, priv);
 	
-  	stm32_gpiowrite(GPIO_LD1, true);
 	if (ret < 0)
     {
       /* Free the device structure if we failed to create the character
@@ -90,6 +130,7 @@ int init_meteo_leds(void)
 
       kmm_free(priv);
     }
+
 	return ret;
 }
 #endif /* CONFIG_ARCH_LEDS */

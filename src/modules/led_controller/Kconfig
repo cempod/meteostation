@@ -1,0 +1,29 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config MODULES_LED_CONTROLLER
+	tristate "Led controller"
+	default n
+	---help---
+		Enable the led controller
+
+if MODULES_LED_CONTROLLER
+
+config MODULES_LED_CONTROLLER_PROGNAME
+	string "Program name"
+	default "led_controller"
+	---help---
+		This is the name of the program that will be used when the NSH ELF
+		program is installed.
+
+config MODULES_LED_CONTROLLER_PRIORITY
+	int "Led controller task priority"
+	default 100
+
+config MODULES_LED_CONTROLLER_STACKSIZE
+	int "Led controller stack size"
+	default DEFAULT_TASK_STACKSIZE
+
+endif 

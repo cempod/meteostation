@@ -1,0 +1,13 @@
+if(CONFIG_MODULES_LED_CONTROLLER)
+    nuttx_add_application(
+        NAME
+        ${CONFIG_MODULES_LED_CONTROLLER_PROGNAME}
+        PRIORITY
+        ${CONFIG_MODULES_LED_CONTROLLER_PRIORITY}
+        STACKSIZE
+        ${CONFIG_MODULES_LED_CONTROLLER_STACKSIZE}
+        MODULE
+        ${CONFIG_MODULES_LED_CONTROLLER}
+        SRCS
+        led_controller_main.cpp)
+endif()
