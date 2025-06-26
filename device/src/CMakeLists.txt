@@ -38,6 +38,21 @@ if(CONFIG_METEO_LEDS)
   list(APPEND SRCS meteo_leds_driver.c)
 endif()
 
+if(CONFIG_ETC_ROMFS)
+  nuttx_add_romfs(
+    NAME
+    etc
+    MOUNTPOINT
+    etc
+    RCSRCS
+    etc/init.d/rc.sysinit
+    etc/init.d/rcS
+    PATH
+    ${CMAKE_CURRENT_BINARY_DIR}/etc)
+
+  target_link_libraries(board PRIVATE romfs_etc)
+endif()
+
 target_sources(board PRIVATE ${SRCS})
 
 set_property(GLOBAL PROPERTY LD_SCRIPT "${NUTTX_BOARD_DIR}/scripts/flash.ld")
