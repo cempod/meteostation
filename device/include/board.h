@@ -224,6 +224,10 @@
 
 #define STM32_RCC_D2CCIP2R_I2C123SRC RCC_D2CCIP2R_I2C123SEL_HSI
 
+/* TIM1 */
+
+#define GPIO_TIM1_CH1OUT  (GPIO_TIM1_CH1OUT_2  | GPIO_SPEED_50MHz) /* PE9  - D6 */
+
 /* I2C4 clock source - HSI */
 
 #define STM32_RCC_D3CCIPR_I2C4SRC    RCC_D3CCIPR_I2C4SEL_HSI
@@ -299,6 +303,11 @@
 #define BOARD_LED1        0
 #define BOARD_NLEDS       1
 
+enum meteo_leds {
+	MSTATUS_LED = 0,
+	MDISPLAY_BACK_LED,
+	METEO_NLEDS
+};
 /* LED bits for use with board_userled_all() */
 
 #define BOARD_LED1_BIT    (1 << BOARD_LED1)

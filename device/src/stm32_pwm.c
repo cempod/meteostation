@@ -1,5 +1,5 @@
 /****************************************************************************
- * boards/meteostation/src/stm32_bringup.c
+ * boards/meteostation/src/stm32_pwm.c
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -26,77 +26,85 @@
 
 #include <nuttx/config.h>
 
-#include <sys/types.h>
-#include <syslog.h>
 #include <errno.h>
+#include <debug.h>
 
+#include <nuttx/timers/pwm.h>
 #include <arch/board/board.h>
 
-#include <nuttx/fs/fs.h>
-
+#include "chip.h"
+#include "arm_internal.h"
+#include "stm32_pwm.h"
 #include "meteostation.h"
 
-#include "stm32_gpio.h"
-
 /****************************************************************************
- * Private Functions
+ * Pre-processor Definitions
  ****************************************************************************/
+
+/* Configuration ************************************************************/
+
+#define HAVE_PWM 1
+
+#ifndef CONFIG_PWM
+#  undef HAVE_PWM
+#endif
+
+#ifndef CONFIG_STM32H7_TIM1
+#  undef HAVE_PWM
+#endif
+
+#ifndef CONFIG_STM32H7_TIM1_PWM
+#  undef HAVE_PWM
+#endif
 
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
 
 /****************************************************************************
- * Name: stm32_bringup
+ * Name: stm32_pwm_setup
  *
  * Description:
- *   Perform architecture-specific initialization
- *
- *   CONFIG_BOARD_LATE_INITIALIZE=y :
- *     Called from board_late_initialize().
- *
- *   CONFIG_BOARD_LATE_INITIALIZE=n && CONFIG_BOARDCTL=y &&
- *   CONFIG_NSH_ARCHINIT:
- *     Called from the NSH library
+ *   Initialize PWM and register the PWM device.
  *
  ****************************************************************************/
 
-int stm32_bringup(void)
+int stm32_pwm_setup(void)
 {
-  int ret = OK;
+#ifdef HAVE_PWM
+  static bool initialized = false;
+  struct pwm_lowerhalf_s *pwm;
+  int ret;
 
-  UNUSED(ret);
+  /* Have we already initialized? */
 
-#ifdef CONFIG_FS_PROCFS
-  /* Mount the procfs file system */
-
-  ret = nx_mount(NULL, STM32_PROCFS_MOUNTPOINT, "procfs", 0, NULL);
-  if (ret < 0)
+  if (!initialized)
     {
-      syslog(LOG_ERR,
-             "ERROR: Failed to mount the PROC filesystem: %d\n",  ret);
-    }
-#endif /* CONFIG_FS_PROCFS */
-  
-#ifdef CONFIG_PWM
-  /* Initialize PWM and register the PWM device. */
-  extern int stm32_pwm_setup(void);
-  ret = stm32_pwm_setup();
-  if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: stm32_pwm_setup() failed: %d\n", ret);
-    }
-#endif
+      /* Get an instance of the PWM interface */
 
-#ifdef CONFIG_METEO_LEDS
-  extern int init_meteo_leds(void);
-  ret = init_meteo_leds();
-  if (ret < 0)
-    {
-      syslog(LOG_ERR,
-             "ERROR: Failed to init meteo leds %d\n",  ret);
+      pwm = stm32_pwminitialize(1);
+      if (!pwm)
+        {
+          tmrerr("ERROR: Failed to get the STM32 PWM lower half\n");
+          return -ENODEV;
+        }
+
+      /* Register the PWM driver at "/dev/pwm0" */
+
+      ret = pwm_register("/dev/pwm0", pwm);
+      if (ret < 0)
+        {
+          tmrerr("ERROR: pwm_register failed: %d\n", ret);
+          return ret;
+        }
+
+      /* Now we are initialized */
+
+      initialized = true;
     }
-#endif /* CONFIG_METEO_LEDS */
 
   return OK;
+#else
+  return -ENODEV;
+#endif
 }

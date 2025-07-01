@@ -34,6 +34,10 @@ if(CONFIG_USBDEV)
   list(APPEND SRCS stm32_usb.c)
 endif()
 
+if(CONFIG_PWM)
+  list(APPEND SRCS stm32_pwm.c)
+endif()
+
 if(CONFIG_METEO_LEDS)
   list(APPEND SRCS meteo_leds_driver.c)
 endif()

@@ -13,12 +13,6 @@
 #include <syslog.h>
 #include <unistd.h>
 
-struct meteo_leds_s
-{
-	uint8_t pwm_leds_mask;
-	uint8_t leds_statuses[BOARD_NLEDS];
-};
-
 bool g_led_controller_started = false;
 
 static int led_controller(int argc, char *argv[])
@@ -33,21 +27,12 @@ static int led_controller(int argc, char *argv[])
         close(fd);
         return EXIT_FAILURE;
     }
-    meteo_leds_s leds;
 
     while (true) {
         static bool status = false;
-        int ret;
 
-        ret = ioctl(fd, 0, status ? 1 : 0);
+        ioctl(fd, MSTATUS_LED, status ? 1 : 0);
         status = !status;
-
-        ret = read(fd, &leds, sizeof(leds));
-        if (ret != sizeof(leds))
-        {
-          syslog(LOG_ERR, "Could not read leds");
-          return EXIT_FAILURE;
-        }
 
         usleep(500 * 1000);
     }
