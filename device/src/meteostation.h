@@ -115,6 +115,11 @@
 
 #define GPIO_BTN_USER  (GPIO_INPUT | GPIO_FLOAT | GPIO_EXTI | GPIO_PORTC | GPIO_PIN13)
 
+#define GPIO_SDIO_NCD     (GPIO_INPUT|GPIO_PULLUP|GPIO_EXTI|GPIO_PORTD|GPIO_PIN4) /* PD4 */
+
+#define SDIO_SLOTNO        0
+#define SDIO_MINOR         0
+
 /****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
