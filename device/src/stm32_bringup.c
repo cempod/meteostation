@@ -98,5 +98,14 @@ int stm32_bringup(void)
     }
 #endif /* CONFIG_METEO_LEDS */
 
+#ifdef CONFIG_STM32H7_SDMMC1
+  /* Initialize the SDIO block driver */
+  extern int stm32_sdio_initialize(void);
+  ret = stm32_sdio_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to initialize MMC/SD driver: %d\n", ret);
+    }
+#endif
   return OK;
 }

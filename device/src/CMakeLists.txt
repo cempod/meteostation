@@ -42,6 +42,11 @@ if(CONFIG_METEO_LEDS)
   list(APPEND SRCS meteo_leds_driver.c)
 endif()
 
+
+if(CONFIG_STM32H7_SDMMC1)
+  list(APPEND SRCS stm32_sdmmc.c)
+endif()
+
 if(CONFIG_ETC_ROMFS)
   nuttx_add_romfs(
     NAME
