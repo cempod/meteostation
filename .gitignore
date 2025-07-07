@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+!device/src/etc/init.d/
 
 # Object files
 *.o
