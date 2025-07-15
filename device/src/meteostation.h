@@ -141,4 +141,8 @@
 
 int stm32_bringup(void);
 
+#if defined (CONFIG_FAT_DMAMEMORY)
+int stm32_dma_alloc_init(void);
+#endif
+
 #endif /* __BOARDS_METEOSTATION_SRC_METEOSTATION_H */
