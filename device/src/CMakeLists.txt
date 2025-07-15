@@ -47,6 +47,10 @@ if(CONFIG_STM32H7_SDMMC1)
   list(APPEND SRCS stm32_sdmmc.c)
 endif()
 
+if(CONFIG_FAT_DMAMEMORY)
+  list(APPEND SRCS stm32_dma_alloc.c)
+endif()
+
 if(CONFIG_ETC_ROMFS)
   nuttx_add_romfs(
     NAME
