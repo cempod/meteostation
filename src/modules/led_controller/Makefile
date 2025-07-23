@@ -1,0 +1,15 @@
+include $(APPDIR)/Make.defs
+
+# LED driver test built-in application info
+
+PROGNAME = $(CONFIG_MODULES_LED_CONTROLLER_PROGNAME)
+PRIORITY = $(CONFIG_MODULES_LED_CONTROLLER_PRIORITY)
+STACKSIZE = $(CONFIG_MODULES_LED_CONTROLLER_STACKSIZE)
+MODULE = $(CONFIG_MODULES_LED_CONTROLLER)
+
+# LED driver test
+
+CXXEXT = .cpp
+MAINSRC = led_controller_main.cpp
+
+include $(APPDIR)/Application.mk

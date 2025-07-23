@@ -1,5 +1,5 @@
 ############################################################################
-# boards/meteostation/src/Makefile
+# apps/src/Makefile
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -20,40 +20,6 @@
 #
 ############################################################################
 
-include $(TOPDIR)/Make.defs
+MENUDESC = "Meteo srcs"
 
-CSRCS = stm32_boot.c stm32_bringup.c
-
-ifeq ($(CONFIG_ARCH_LEDS),y)
-CSRCS += stm32_autoleds.c
-endif
-
-ifeq ($(CONFIG_BOARDCTL),y)
-CSRCS += stm32_appinitialize.c
-endif
-
-ifeq ($(CONFIG_USBDEV),y)
-CSRCS += stm32_usb.c
-endif
-
-ifeq ($(CONFIG_PWM),y)
-CSRCS += stm32_pwm.c
-endif
-
-ifeq ($(CONFIG_METEO_LEDS),y)
-CSRCS += meteo_leds_driver.c
-endif
-
-ifeq ($(CONFIG_STM32H7_SDMMC1),y)
-CSRCS += stm32_sdmmc.c
-endif
-
-ifeq ($(CONFIG_FAT_DMAMEMORY),y)
-CSRCS += stm32_dma_alloc.c
-endif
-
-ifeq ($(CONFIG_ETC_ROMFS),y)
-RCSRCS = etc/init.d/rc.sysinit etc/init.d/rcS	
-endif
-
-include $(TOPDIR)/boards/Board.mk
+include $(APPDIR)/Directory.mk

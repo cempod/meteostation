@@ -1,0 +1,3 @@
+ifeq ($(CONFIG_MODULES_LED_CONTROLLER), y)
+CONFIGURED_APPS += $(APPDIR)/src/modules/led_controller
+endif
