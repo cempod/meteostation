@@ -44,6 +44,16 @@ ifeq ($(CONFIG_METEO_LEDS),y)
 CSRCS += meteo_leds_driver.c
 endif
 
+ifeq ($(CONFIG_STM32H7_SPI),y)
+CSRCS += stm32_spi.c
+
+ifeq ($(CONFIG_LCD),y)
+CSRCS += stm32_st7796.c
+CSRCS += st7796.c
+endif
+
+endif
+
 ifeq ($(CONFIG_STM32H7_SDMMC1),y)
 CSRCS += stm32_sdmmc.c
 endif

@@ -238,7 +238,7 @@
 
 /* SPI45 clock source - APB (PCLK2?) */
 
-#define STM32_RCC_D2CCIP1R_SPI45SRC  RCC_D2CCIP1R_SPI45SEL_APB
+#define STM32_RCC_D2CCIP1R_SPI45SRC  RCC_D2CCIP1R_SPI45SEL_PLL2
 
 /* SPI6 clock source - APB (PCLK4) */
 
@@ -362,6 +362,10 @@ enum meteo_leds {
 #define GPIO_OTGFS_DP  (GPIO_OTGFS_DP_0|GPIO_SPEED_100MHz) /* PA12 */
 #define GPIO_OTGFS_ID  (GPIO_OTGFS_ID_0|GPIO_SPEED_100MHz) /* PA10 */
 
+/* SPI */
+#define GPIO_SPI4_SCK    (GPIO_SPI4_SCK_1  | GPIO_SPEED_50MHz) /* PE12 */
+#define GPIO_SPI4_MOSI   (GPIO_SPI4_MOSI_1 | GPIO_SPEED_50MHz) /* PE14 */
+#define GPIO_SPI4_MISO   0
 /****************************************************************************
  * Public Data
  ****************************************************************************/

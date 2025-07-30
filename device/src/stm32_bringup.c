@@ -33,11 +33,15 @@
 #include <arch/board/board.h>
 
 #include <nuttx/fs/fs.h>
+#include <nuttx/lcd/lcd_dev.h>
 
 #include "meteostation.h"
 
 #include "stm32_gpio.h"
 
+#ifdef CONFIG_VIDEO_FB
+#include <nuttx/video/fb.h>
+#endif
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
@@ -85,6 +89,34 @@ int stm32_bringup(void)
   if (ret < 0)
     {
       syslog(LOG_ERR, "ERROR: stm32_pwm_setup() failed: %d\n", ret);
+    }
+#endif
+
+#ifdef CONFIG_STM32H7_SPI
+  stm32_spidev_initialize();
+#endif
+
+#ifdef CONFIG_LCD
+  ret = board_lcd_initialize();
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: Failed to initialize LCD.\n");
+    }
+#endif
+
+#ifdef CONFIG_LCD_DEV
+  ret = lcddev_register(0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
+    }
+#endif
+
+#ifdef CONFIG_VIDEO_FB
+  ret = fb_register(0, 0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: fb_register() failed: %d\n", ret);
     }
 #endif
 

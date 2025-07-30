@@ -42,6 +42,14 @@ if(CONFIG_METEO_LEDS)
   list(APPEND SRCS meteo_leds_driver.c)
 endif()
 
+if(CONFIG_STM32H7_SPI)
+  list(APPEND SRCS stm32_spi.c)
+endif()
+
+if(CONFIG_LCD_ST7796)
+  list(APPEND SRCS stm32_st7796.c)
+  list(APPEND SRCS st7796.c)
+endif()
 
 if(CONFIG_STM32H7_SDMMC1)
   list(APPEND SRCS stm32_sdmmc.c)

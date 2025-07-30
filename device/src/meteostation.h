@@ -120,6 +120,16 @@
 #define SDIO_SLOTNO        0
 #define SDIO_MINOR         0
 
+#define GPIO_LCD_CMD       (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_SPEED_50MHz | \
+                        GPIO_OUTPUT_CLEAR | GPIO_PORTE | GPIO_PIN13)
+#define GPIO_LCD_CS       (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_SPEED_50MHz | \
+                        GPIO_OUTPUT_CLEAR | GPIO_PORTE | GPIO_PIN10)
+#define GPIO_LCD_RST       (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_SPEED_50MHz | \
+                        GPIO_OUTPUT_CLEAR | GPIO_PORTE | GPIO_PIN9)
+
+#define GPIO_MLCD_CS       (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_SPEED_50MHz | \
+                        GPIO_OUTPUT_CLEAR | GPIO_PORTE | GPIO_PIN11)
+
 /****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
@@ -143,6 +153,18 @@ int stm32_bringup(void);
 
 #if defined (CONFIG_FAT_DMAMEMORY)
 int stm32_dma_alloc_init(void);
+#endif
+
+#ifdef CONFIG_STM32H7_SPI
+  void stm32_spidev_initialize(void);
+#ifdef CONFIG_STM32H7_SPI4
+  struct spi_dev_s *stm32_spi4initialize(void);
+#endif
+
+#ifdef CONFIG_LCD
+  int board_lcd_initialize(void);
+#endif
+
 #endif
 
 #endif /* __BOARDS_METEOSTATION_SRC_METEOSTATION_H */
