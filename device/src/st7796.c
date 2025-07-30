@@ -63,7 +63,7 @@ static int st7796_getpower(FAR struct lcd_dev_s *dev);
 static int st7796_setpower(FAR struct lcd_dev_s *dev, int power);
 static int st7796_getcontrast(FAR struct lcd_dev_s *dev);
 static int st7796_setcontrast(FAR struct lcd_dev_s *dev, unsigned int contrast);
-//static void st7796_fill(FAR struct st7796_dev_s *dev, uint16_t color);
+static void st7796_fill(FAR struct st7796_dev_s *dev, uint16_t color);
 static void st7796_setarea(FAR struct st7796_dev_s *dev, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 static void st7796_wrram(FAR struct st7796_dev_s *dev, FAR const uint8_t *buff, size_t size, size_t skip, size_t count);
 static int st7796_putrun(FAR struct lcd_dev_s *dev, fb_coord_t row, fb_coord_t col, FAR const uint8_t *buffer, size_t npixels);
@@ -132,8 +132,7 @@ static int st7796_setcontrast(FAR struct lcd_dev_s *dev,
     return -ENOSYS;
 }
 
-/*static void st7796_fill(FAR struct st7796_dev_s *dev, uint16_t color)
-{
+static void st7796_fill(FAR struct st7796_dev_s *dev, uint16_t color) {
     FAR struct st7796_dev_s *priv = (FAR struct st7796_dev_s *)dev;
 
     st7796_setarea(priv, 0, 0, 479, 319);
@@ -146,7 +145,7 @@ static int st7796_setcontrast(FAR struct lcd_dev_s *dev,
     }
 
     st7796_deselect(dev->spi);
-}*/
+}
 
 static void st7796_setarea(FAR struct st7796_dev_s *dev,
                            uint16_t x0, uint16_t y0,
@@ -208,17 +207,13 @@ static int st7796_putarea(FAR struct lcd_dev_s *dev,
     size_t cols = col_end - col_start + 1;
     size_t rows = row_end - row_start + 1;
     size_t row_size = cols * 2;
- syslog(LOG_ERR, "row_start: %d row_end: %d col_start: %d col_end: %d\n",
-         row_start, row_end, col_start, col_end);
     DEBUGASSERT(buffer && ((uintptr_t)buffer & 1) == 0);
 
     st7796_setarea(priv, col_start, row_start, col_end, row_end);
 
     if (stride == row_size) {
-        syslog(LOG_ERR, "Using full screen/full row mode\n");
         st7796_wrram(priv, buffer, rows * row_size, 0, 1);
     } else {
-      syslog(LOG_ERR, "Falling-back to row by row mode\n");
         st7796_wrram(priv, buffer, row_size, stride - row_size, rows);
     }
 
@@ -355,7 +350,7 @@ FAR struct lcd_dev_s *st7796_lcdinitialize(FAR struct spi_dev_s *spi) {
     
     st7796_deselect(spi);
 
-    //st7796_fill(priv, 0x0000);
+    st7796_fill(priv, 0x0000);
 
     return &priv->dev;
 }
