@@ -296,6 +296,10 @@
 #define GPIO_SDMMC1_D2   (GPIO_SDMMC1_D2_0|GPIO_SPEED_100MHz)  /* PC10 */
 #define GPIO_SDMMC1_D3   (GPIO_SDMMC1_D3_0|GPIO_SPEED_100MHz)  /* PC11 */
 
+/* DMA */
+#define DMAMAP_SPI4_RX DMAMAP_DMA12_SPI4RX_0 /* DMA1 */
+#define DMAMAP_SPI4_TX DMAMAP_DMA12_SPI4TX_0 /* DMA1 */
+
 /* LED definitions **********************************************************/
 
 /* The board has 1 user LED that could be used this diagnostic LED too.
