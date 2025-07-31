@@ -120,6 +120,18 @@ int stm32_bringup(void)
     }
 #endif
 
+#ifdef CONFIG_INPUT_FT5X06
+  /* Initialize the touchscreen.
+   * WARNING: stm32_tsc_setup() cannot be called from the IDLE thread.
+   */
+  stm32_configgpio(GPIO_FT5X06_RST);
+  ret = stm32_tsc_setup(0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR, "ERROR: stm32_tsc_setup failed: %d\n", ret);
+    }
+#endif
+
 #ifdef CONFIG_METEO_LEDS
   extern int init_meteo_leds(void);
   ret = init_meteo_leds();

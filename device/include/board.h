@@ -370,6 +370,12 @@ enum meteo_leds {
 #define GPIO_SPI4_SCK    (GPIO_SPI4_SCK_1  | GPIO_SPEED_50MHz) /* PE12 */
 #define GPIO_SPI4_MOSI   (GPIO_SPI4_MOSI_1 | GPIO_SPEED_50MHz) /* PE14 */
 #define GPIO_SPI4_MISO   0
+
+/* I2C */
+
+#define GPIO_I2C4_SCL    (GPIO_I2C4_SCL_1 | GPIO_SPEED_50MHz)  /* PD12 */
+#define GPIO_I2C4_SDA    (GPIO_I2C4_SDA_1 | GPIO_SPEED_50MHz)  /* PD13 */
+
 /****************************************************************************
  * Public Data
  ****************************************************************************/

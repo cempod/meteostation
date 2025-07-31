@@ -46,9 +46,13 @@ if(CONFIG_STM32H7_SPI)
   list(APPEND SRCS stm32_spi.c)
 endif()
 
-if(CONFIG_LCD_ST7796)
+if(CONFIG_LCD)
   list(APPEND SRCS stm32_st7796.c)
   list(APPEND SRCS st7796.c)
+endif()
+
+if(CONFIG_INPUT_FT5X06)
+  list(APPEND SRCS stm32_ft5x06.c)
 endif()
 
 if(CONFIG_STM32H7_SDMMC1)

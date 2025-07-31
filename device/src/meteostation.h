@@ -130,6 +130,13 @@
 #define GPIO_MLCD_CS       (GPIO_OUTPUT | GPIO_PUSHPULL | GPIO_SPEED_50MHz | \
                         GPIO_OUTPUT_CLEAR | GPIO_PORTE | GPIO_PIN11)
 
+
+#define FT5X06_I2C_ADDRESS  0x38
+#define GPIO_FT5X06_INT    (GPIO_INPUT|GPIO_FLOAT|GPIO_SPEED_100MHz| \
+                            GPIO_PUSHPULL|GPIO_PORTD|GPIO_PIN11)
+
+#define GPIO_FT5X06_RST    (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz|\
+                            GPIO_OUTPUT_SET|GPIO_PORTD|GPIO_PIN10)
 /****************************************************************************
  * Public Function Prototypes
  ****************************************************************************/
@@ -163,6 +170,10 @@ int stm32_dma_alloc_init(void);
 
 #ifdef CONFIG_LCD
   int board_lcd_initialize(void);
+#endif
+
+#ifdef CONFIG_INPUT_FT5X06
+int stm32_tsc_setup(int minor);
 #endif
 
 #endif

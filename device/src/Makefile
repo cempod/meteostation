@@ -54,6 +54,10 @@ endif
 
 endif
 
+ifeq ($(CONFIG_INPUT_FT5X06),y)
+CSRCS += stm32_ft5x06.c
+endif
+
 ifeq ($(CONFIG_STM32H7_SDMMC1),y)
 CSRCS += stm32_sdmmc.c
 endif

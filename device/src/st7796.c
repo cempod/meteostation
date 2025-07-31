@@ -53,7 +53,7 @@ struct st7796_dev_s {
 
 #define LCD_ST7796_SPI_BITS 8
 #define LCD_ST7796_SPIMODE SPIDEV_MODE0
-#define LCD_ST7796_FREQUENCY 48000000
+#define LCD_ST7796_FREQUENCY 20000000
 
 static void st7796_sleep(FAR struct st7796_dev_s *dev, bool sleep);
 static void st7796_select(FAR struct spi_dev_s *spi, int bits);
