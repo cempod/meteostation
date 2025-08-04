@@ -1,6 +1,6 @@
 cd nuttx-apps
-ln -s ../src src
+if [ ! -d "src" ]; then
+   ln -s ../src src
+fi
 cd ../nuttx
 make menuconfig
-cd ../nuttx-apps
-rm -rf src

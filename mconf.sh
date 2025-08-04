@@ -1,7 +1,7 @@
 cd nuttx-apps
-ln -s ../src src
+if [ ! -d "src" ]; then
+   ln -s ../src src
+fi
 cd ../nuttx 
 make distclean
 ./tools/configure.sh -l ../device/configs/main
-cd ../nuttx-apps
-rm -rf src
